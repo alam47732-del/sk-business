@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SK BUSINESS</title>
+    <meta name="theme-color" content="#2563eb">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SK BUSINESS">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #8b5cf6;
+            --tertiary: #ec4899;
+            --success: #10b981;
+            --error: #ef4444;
+            --text-main: #0f172a;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: linear-gradient(-45deg, #020617, #0f172a, #1e3a8a, #020617);
+            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+            height: 100vh; height: 100dvh; display: flex; justify-content: center; align-items: center;
+            color: var(--text-main); overflow: hidden; position: relative;
+        }
+        body.in-app { background: var(--bg-light); animation: none; }
+        body.in-app::before, body.in-app::after { display: none; }
+
+        body::before { content: ''; position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%); top: -100px; left: -100px; border-radius: 50%; z-index: 0; }
+        body::after { content: ''; position: absolute; width: 350px; height: 350px; background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%); bottom: -50px; right: -100px; border-radius: 50%; z-index: 0; }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .view { display: none; width: 100%; height: 100vh; height: 100dvh; position: relative; flex-direction: column; justify-content: center; z-index: 1; }
+        .view.active { display: flex; animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .auth-container { padding: 2.2rem 1.8rem; width: 90%; max-width: 420px; margin: auto; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.6); max-height: 95vh; max-height: 95dvh; overflow-y: auto; }
+        .brand-logo { width: 70px; height: 70px; background: linear-gradient(135deg, var(--primary), var(--secondary), var(--tertiary)); border-radius: 20px; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px auto; color: white; font-size: 30px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); position: relative; }
+        .brand-logo .fa-leaf { position: absolute; font-size: 14px; top: -5px; right: -5px; background: var(--success); padding: 5px; border-radius: 50%; border: 2px solid white; }
+        .header-title { text-align: center; font-size: 1.7rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.2rem; }
+        .sub-title { text-align: center; font-size: 0.95rem; color: var(--text-light); margin-bottom: 1.5rem; font-weight: 500; }
+
+        .input-group { margin-bottom: 1rem; position: relative; }
+        .input-group i.icon-left { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; transition: color 0.3s; font-size: 1.05rem; }
+        .input-group i.status-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: none; font-size: 1.1rem; }
+        input { width: 100%; padding: 14px 40px 14px 45px; border: 2px solid #e2e8f0; border-radius: 14px; font-size: 1rem; font-weight: 500; outline: none; transition: all 0.3s; background: var(--bg-light); color: var(--text-main); }
+        input:focus { border-color: var(--primary); background: var(--white); box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1); }
+        input:focus + i.icon-left { color: var(--primary); }
+        input.valid { border-color: var(--success); background: #f0fdf4; }
+        input.valid ~ i.status-icon.fa-check-circle { display: block; color: var(--success); }
+        input.invalid { border-color: var(--error); background: #fef2f2; }
+        input.invalid ~ i.status-icon.fa-times-circle { display: block; color: var(--error); }
+
+        .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 8px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-google { background: #fff; color: #334155; border: 2px solid #e2e8f0; box-shadow: none; text-transform: none; font-size: 0.98rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-google:hover { background: #f8fafc; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .btn-google i { color: #ea4335; font-size: 1.1rem; }
+
+        .divider { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 0.8rem; font-weight: 600; margin: 16px 0 6px; }
+        .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e2e8f0; }
+
+        .link-text { text-align: center; margin-top: 18px; font-size: 0.95rem; color: var(--text-light); font-weight: 500; }
+        .link-text span { color: var(--primary); font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .link-text span:hover { text-decoration: underline; }
+        .forgot-pass { display: block; text-align: right; font-size: 0.85rem; color: var(--primary); margin-top: -4px; margin-bottom: 10px; cursor: pointer; font-weight: 700; }
+        .error-message { color: var(--error); font-size: 0.85rem; text-align: center; margin-bottom: 10px; font-weight: 600; display: none; }
+
+        .contact-support { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 22px; padding: 13px; border-radius: 14px; background: #f0f9ff; text-decoration: none; color: #0284c7; font-weight: 700; font-size: 0.95rem; transition: all 0.3s; border: 1px solid #bae6fd; }
+        .contact-support:hover { background: #0284c7; color: #ffffff; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2); }
+        .policy-box { margin-top: 10px; padding: 12px 14px; border-radius: 12px; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; font-size: 0.78rem; line-height: 1.5; font-weight: 500; }
+        .policy-box b { display: block; margin-bottom: 4px; font-size: 0.82rem; }
+        .policy-box ul { padding-left: 16px; }
+
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(5px); }
+        .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .custom-alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(4px); padding: 20px; }
+        .custom-alert-box { background: white; width: 100%; max-width: 320px; padding: 25px 20px; border-radius: 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .custom-alert-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; margin: 0 auto 15px auto; }
+        .custom-alert-box h3 { color: var(--text-main); font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; }
+        .custom-alert-box p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.4; }
+        .custom-alert-box .btn { margin-top: 0; padding: 12px; font-size: 1rem; border-radius: 12px; }
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        /* APP SHELL */
+        #appShell { justify-content: flex-start; }
+        .app-header { background: var(--white); color: var(--text-main); padding: 20px; font-size: 1.25rem; font-weight: 800; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; }
+        .app-header .logout-btn { margin-left: auto; width: 38px; height: 38px; border-radius: 12px; background: #fef2f2; color: var(--error); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; }
+        .app-content { padding: 20px; flex-grow: 1; overflow-y: auto; padding-bottom: 110px; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .card { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 20px; border: 1px solid #f1f5f9; }
+        .welcome-emoji { font-size: 2.6rem; display: inline-block; animation: wave 1.6s ease-in-out infinite; transform-origin: 70% 70%; }
+        @keyframes wave { 0%,100% { transform: rotate(0); } 20% { transform: rotate(14deg); } 40% { transform: rotate(-8deg); } 60% { transform: rotate(14deg); } 80% { transform: rotate(-4deg); } }
+
+        .bottom-nav { background: var(--white); display: flex; overflow-x: auto; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -5px 25px rgba(0,0,0,0.05); border-top-left-radius: 25px; border-top-right-radius: 25px; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; }
+        .nav-item { text-align: center; color: #94a3b8; cursor: pointer; transition: 0.3s; flex: 1 0 auto; min-width: 72px; }
+        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
+        .nav-item i { font-size: 1.25rem; margin-bottom: 4px; display: block; }
+        .nav-item span { font-size: 0.7rem; font-weight: 700; }
+
+
+        /* ===== SK PAGES ===== */
+        .pg-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+        .f-select { padding:11px 14px; border:2px solid #e2e8f0; border-radius:12px; background:#fff; font-weight:700; font-size:0.9rem; color:var(--text-main); outline:none; width:auto; }
+        .f-select:focus { border-color: var(--primary); }
+        .add-fab { width:46px; height:46px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; font-size:1.2rem; cursor:pointer; box-shadow:0 4px 15px rgba(37,99,235,.3); display:flex; align-items:center; justify-content:center; }
+        .add-fab:active { transform:scale(.94); }
+        .total-box { background:linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff; padding:16px 18px; border-radius:18px; margin-bottom:16px; box-shadow:0 6px 20px rgba(37,99,235,.25); }
+        .total-box small { display:block; font-size:.75rem; font-weight:600; opacity:.85; }
+        .total-box b { font-size:1.6rem; font-weight:800; }
+        .total-box.due b { color:#fff; }
+        .rec-card { background:#fff; border:1px solid #f1f5f9; border-radius:16px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.03); }
+        .rec-card:active { background:#f8fafc; }
+        .rec-card .l { min-width:0; }
+        .rec-card .l b { display:block; font-size:1rem; font-weight:800; }
+        .rec-card .l span { display:block; font-size:.8rem; color:var(--text-light); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .rec-card .r { text-align:right; font-weight:800; white-space:nowrap; }
+        .rec-card .r small { display:block; font-size:.72rem; font-weight:700; margin-top:2px; }
+        .amt-red { color:var(--error); }
+        .amt-green { color:var(--success); }
+        .empty-msg { text-align:center; color:#94a3b8; font-weight:600; padding:30px 10px; }
+        .sheet-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:flex-end; justify-content:center; z-index:10000; backdrop-filter:blur(4px); }
+        .sheet { background:#fff; width:100%; max-width:480px; max-height:92dvh; border-radius:24px 24px 0 0; display:flex; flex-direction:column; animation:fadeIn .3s ease-out; }
+        .sheet-head { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid #f1f5f9; }
+        .sheet-head h3 { font-weight:800; font-size:1.1rem; }
+        .sheet-head i { cursor:pointer; font-size:1.2rem; color:var(--text-light); padding:4px; }
+        .sheet-body { padding:16px 20px; overflow-y:auto; }
+        .sheet-foot { padding:12px 20px calc(12px + env(safe-area-inset-bottom)); border-top:1px solid #f1f5f9; display:flex; justify-content:flex-end; }
+        .sheet-foot .btn { width:auto; min-width:140px; margin-top:0; padding:12px 26px; }
+        .lbl { display:block; font-size:.8rem; font-weight:700; color:var(--text-light); margin:12px 0 6px; }
+        .lbl em { color:var(--error); font-style:normal; }
+        input.f-input, select.f-input { width:100%; padding:13px 14px; border:2px solid #e2e8f0; border-radius:12px; font-size:1rem; font-weight:600; background:var(--bg-light); outline:none; color:var(--text-main); }
+        input.f-input:focus, select.f-input:focus { border-color:var(--primary); background:#fff; }
+        .chips { display:none; flex-wrap:wrap; gap:8px; margin-top:8px; }
+        .chips.show { display:flex; }
+        .chip { padding:8px 14px; background:#eff6ff; color:var(--primary); border-radius:20px; font-weight:700; font-size:.85rem; cursor:pointer; border:1px solid #dbeafe; }
+        .chip:active { background:var(--primary); color:#fff; }
+        .item-row { background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:10px; margin-top:10px; position:relative; }
+        .item-row .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+        .item-row .rm { position:absolute; top:8px; right:10px; color:var(--error); cursor:pointer; font-size:.9rem; }
+        .add-row-btn { margin-top:10px; width:100%; padding:11px; border:2px dashed #bfdbfe; background:#eff6ff; color:var(--primary); border-radius:12px; font-weight:800; cursor:pointer; }
+        .sum-line { display:flex; justify-content:space-between; align-items:center; padding:10px 2px; font-weight:800; }
+        .sum-line.big { font-size:1.1rem; }
+        .det-row { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid #f1f5f9; font-weight:600; }
+        .det-row span:first-child { color:var(--text-light); }
+        .det-row span:last-child { font-weight:800; text-align:right; }
+        .badge-due { background:#fef2f2; color:var(--error); padding:4px 10px; border-radius:10px; font-weight:800; }
+        .badge-paid { background:#f0fdf4; color:var(--success); padding:4px 10px; border-radius:10px; font-weight:800; }
+        .opt-row { background:#fff; border:1px solid #f1f5f9; padding:16px 20px; border-radius:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-weight:700; }
+
+        .sheet-foot.split { justify-content:space-between; gap:10px; }
+        .sheet-foot.split a { flex:1; text-align:center; text-decoration:none; padding:13px 10px; border-radius:14px; font-weight:800; color:#fff; font-size:.95rem; }
+        .sheet-foot.split a.call { background:linear-gradient(135deg,#2563eb,#1e40af); }
+        .sheet-foot.split a.wa { background:#25D366; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="loader"><div class="spinner"></div></div>
+
+    <!-- CUSTOM ALERT -->
+    <div id="customAlertOverlay" class="custom-alert-overlay">
+        <div class="custom-alert-box">
+            <div id="customAlertIcon" class="custom-alert-icon"><i class="fas fa-info-circle"></i></div>
+            <h3 id="customAlertTitle">Message</h3>
+            <p id="customAlertText">Description goes here</p>
+            <button class="btn" onclick="closeAlert()">OK</button>
+        </div>
+    </div>
+
+    <!-- 1. LOGIN -->
+    <div id="loginPage" class="view active">
+        <div class="auth-container">
+            <div class="brand-logo"><i class="fas fa-chart-pie"></i><i class="fas fa-leaf"></i></div>
+            <h1 class="header-title">SK BUSINESS</h1>
+            <p class="sub-title">Sign in to your account.</p>
+
+            <div class="input-group">
+                <input type="email" id="loginEmail" placeholder="Email Address" autocomplete="email">
+                <i class="fas fa-envelope icon-left"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
+                <i class="fas fa-lock icon-left"></i>
+            </div>
+
+            <span class="forgot-pass" onclick="switchView('resetPage')">Forgot Password?</span>
+
+            <button class="btn" id="loginBtn" onclick="window.doLogin()">Login Securely</button>
+
+            <div class="divider">OR</div>
+            <button class="btn btn-google" onclick="window.googleLogin()"><i class="fab fa-google"></i> Continue with Google</button>
+
+            <p class="link-text">New to SK BUSINESS? <span onclick="switchView('registerPage')">Create Account</span></p>
+
+            <a href="https://t.me/SmartnessSuccess" target="_blank" class="contact-support">
+                <i class="fab fa-telegram"></i> Telegram Support
+            </a>
+            <a class="contact-support" style="background:#fffbeb; color:#92400e; border-color:#fde68a; cursor:pointer;" onclick="openPolicy()">
+                <i class="fas fa-shield-halved"></i> Terms &amp; Usage Policy
+            </a>
+        </div>
+    </div>
+
+    <!-- 2. REGISTER -->
+    <div id="registerPage" class="view">
+        <div class="auth-container">
+            <div class="brand-logo"><i class="fas fa-user-plus"></i><i class="fas fa-leaf"></i></div>
+            <h1 class="header-title">Register</h1>
+            <p class="sub-title">Create your business account</p>
+
+            <div class="input-group">
+                <input type="text" id="regName" placeholder="Full Name" autocomplete="name">
+                <i class="fas fa-user icon-left"></i>
+            </div>
+            <div class="input-group">
+                <input type="email" id="regEmail" placeholder="Email Address" autocomplete="email">
+                <i class="fas fa-envelope icon-left"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="regPass" placeholder="Create Password (min 6)" autocomplete="new-password">
+                <i class="fas fa-lock icon-left"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="regCPass" placeholder="Confirm Password" autocomplete="new-password">
+                <i class="fas fa-shield-alt icon-left"></i>
+            </div>
+            <div class="input-group">
+                <input type="text" id="regRef" placeholder="Referral Code (Optional)">
+                <i class="fas fa-user-tag icon-left"></i>
+            </div>
+
+            <button class="btn" id="regBtn" onclick="window.doRegister()">Sign Up</button>
+
+            <div class="divider">OR</div>
+            <button class="btn btn-google" onclick="window.googleLogin()"><i class="fab fa-google"></i> Sign up with Google</button>
+
+            <p class="link-text">Already registered? <span onclick="switchView('loginPage')">Login Here</span></p>
+
+            <a href="https://t.me/SmartnessSuccess" target="_blank" class="contact-support">
+                <i class="fab fa-telegram"></i> Telegram Support
+            </a>
+        </div>
+    </div>
+
+    <!-- 3. RESET PASSWORD (email link, free, no SMS quota used) -->
+    <div id="resetPage" class="view">
+        <div class="auth-container">
+            <div class="brand-logo" style="background: linear-gradient(135deg, #0f172a, #334155);"><i class="fas fa-unlock-alt"></i></div>
+            <h1 class="header-title">Reset Password</h1>
+            <p class="sub-title">We will email you a secure reset link.</p>
+
+            <div class="input-group">
+                <input type="email" id="resetEmail" placeholder="Registered Email Address" autocomplete="email">
+                <i class="fas fa-envelope icon-left"></i>
+            </div>
+
+            <button class="btn" id="resetBtn" onclick="window.sendReset()">Send Reset Link</button>
+            <p class="link-text"><span onclick="switchView('loginPage')">Back to Login</span></p>
+
+            <a href="https://t.me/SmartnessSuccess" target="_blank" class="contact-support">
+                <i class="fab fa-telegram"></i> Telegram Support
+            </a>
+        </div>
+    </div>
+
+    <!-- EMAIL VERIFICATION -->
+    <div id="verifyPage" class="view">
+        <div class="auth-container" style="text-align:center;">
+            <div class="brand-logo" style="background: linear-gradient(135deg, var(--success), #059669);"><i class="fas fa-envelope-circle-check"></i></div>
+            <h1 class="header-title">Verify Your Email</h1>
+            <p class="sub-title" style="margin-bottom:1rem;">We sent a verification link to<br><b id="verifyEmailText" style="color:var(--primary);"></b></p>
+            <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:12px;">Open your inbox (check Spam too), tap the link, then come back and press the button below.</p>
+            <button class="btn" onclick="window.checkVerified()">I Have Verified</button>
+            <button class="btn" id="resendBtn" style="background:#f1f5f9; color:var(--primary); box-shadow:none;" onclick="window.resendVerification()">Resend Email</button>
+            <p class="link-text"><span onclick="logout()">Back to Login</span></p>
+        </div>
+    </div>
+
+    <!-- NEW PASSWORD (opened from the reset email link) -->
+    <div id="newPassPage" class="view">
+        <div class="auth-container">
+            <div class="brand-logo" style="background: linear-gradient(135deg, #0f172a, #334155);"><i class="fas fa-key"></i></div>
+            <h1 class="header-title">New Password</h1>
+            <p class="sub-title" style="margin-bottom:1rem;">Set a new password for<br><b id="newPassEmail" style="color:var(--primary);"></b></p>
+            <div class="input-group">
+                <input type="password" id="newPass" placeholder="New Password (min 6)" autocomplete="new-password">
+                <i class="fas fa-lock icon-left"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="confirmNewPass" placeholder="Confirm New Password" autocomplete="new-password">
+                <i class="fas fa-check-double icon-left"></i>
+            </div>
+            <button class="btn" style="background: linear-gradient(135deg, var(--success), #059669);" onclick="window.saveNewPassword()">Save New Password</button>
+            <p class="link-text">Your account and data stay safe, only the password changes.</p>
+        </div>
+    </div>
+
+    <!-- 4. APP SHELL (after login) -->
+    <div id="appShell" class="view">
+        <div class="app-header">
+            <div class="brand-logo" style="width: 36px; height: 36px; font-size: 14px; margin:0; border-radius:10px;"><i class="fas fa-chart-pie"></i></div>
+            <span id="pageTitle">Account</span>
+        </div>
+
+        <div class="app-content">
+            <!-- Pages below are intentionally empty for now -->
+            <div id="page-customer" class="page"></div>
+            <div id="page-sales" class="page"></div>
+            <div id="page-factory" class="page"></div>
+            <div id="page-homeexp" class="page"></div>
+            <div id="page-buy" class="page"></div>
+
+            <!-- ACCOUNT: welcome + options + logout (at the very bottom) -->
+            <div id="page-account" class="page">
+                <div class="card" style="text-align:center;">
+                    <div class="welcome-emoji">👋</div>
+                    <h2 id="homeWelcomeText" style="font-weight:800; margin-top:8px;">Welcome to SK BUSINESS</h2>
+                    <p id="homeSubText" style="color: var(--text-light); margin-top:6px; font-weight:500;">You have logged in successfully.</p>
+                    <span id="accountName" style="display:none;">User</span>
+                    <p id="accountEmail" style="color: var(--text-light); font-size:0.9rem; margin-top:10px; font-weight:600;"></p>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+                    <div onclick="openNameModal()" style="background:#fff; border:1px solid #f1f5f9; padding:16px 20px; border-radius:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-weight:700;">
+                        <span><i class="fas fa-pen" style="color:var(--primary); width:24px;"></i> Change Name</span>
+                        <i class="fas fa-chevron-right" style="color:#cbd5e1; font-size:0.9rem;"></i>
+                    </div>
+                    <div onclick="generateBill()" style="background:#fff; border:1px solid #f1f5f9; padding:16px 20px; border-radius:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-weight:700;">
+                        <span><i class="fas fa-file-invoice" style="color:var(--success); width:24px;"></i> Generate Bill <small style="background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:8px; font-size:.7rem; margin-left:6px;">Coming Soon</small></span>
+                        <i class="fas fa-chevron-right" style="color:#cbd5e1; font-size:0.9rem;"></i>
+                    </div>
+                    <div onclick="skApp.openDownload()" style="background:#fff; border:1px solid #f1f5f9; padding:16px 20px; border-radius:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-weight:700;">
+                        <span><i class="fas fa-download" style="color:#f59e0b; width:24px;"></i> Download Form</span>
+                        <i class="fas fa-chevron-right" style="color:#cbd5e1; font-size:0.9rem;"></i>
+                    </div>
+                    <div onclick="skApp.openCustDownload()" style="background:#fff; border:1px solid #f1f5f9; padding:16px 20px; border-radius:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-weight:700;">
+                        <span><i class="fas fa-file-arrow-down" style="color:var(--tertiary); width:24px;"></i> Customer Data Download</span>
+                        <i class="fas fa-chevron-right" style="color:#cbd5e1; font-size:0.9rem;"></i>
+                    </div>
+                    <div id="installRow" onclick="skInstall.install()" style="background:#fff; border:1px solid #f1f5f9; padding:16px 20px; border-radius:16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; font-weight:700;">
+                        <span><i class="fas fa-mobile-screen-button" style="color:var(--secondary); width:24px;"></i> Install App</span>
+                        <i class="fas fa-chevron-right" style="color:#cbd5e1; font-size:0.9rem;"></i>
+                    </div>
+                </div>
+
+                <button class="btn" style="background:#f1f5f9; color: var(--error); box-shadow:none; border:2px solid #fee2e2;" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Secure Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item" data-page="customer" data-title="Customer"><i class="fas fa-users"></i><span>Customer</span></div>
+            <div class="nav-item" data-page="sales" data-title="Sales"><i class="fas fa-chart-line"></i><span>Sales</span></div>
+            <div class="nav-item" data-page="factory" data-title="Factory Expense"><i class="fas fa-industry"></i><span>Factory Expense</span></div>
+            <div class="nav-item" data-page="homeexp" data-title="Home Expense"><i class="fas fa-house-chimney"></i><span>Home Expense</span></div>
+            <div class="nav-item" data-page="buy" data-title="Buy"><i class="fas fa-cart-shopping"></i><span>Buy</span></div>
+            <div class="nav-item active" data-page="account" data-title="Account"><i class="fas fa-user"></i><span>Account</span></div>
+        </div>
+    </div>
+
+
+    <!-- SK SHEETS -->
+    <div id="skSheet" class="sheet-overlay" onclick="if(event.target===this)skApp.closeSheet()">
+        <div class="sheet">
+            <div class="sheet-head"><h3 id="skSheetTitle"></h3><i class="fas fa-times" onclick="skApp.closeSheet()"></i></div>
+            <div class="sheet-body" id="skSheetBody"></div>
+            <div class="sheet-foot" id="skSheetFoot"></div>
+        </div>
+    </div>
+
+    <!-- CHANGE NAME -->
+    <div id="nameOverlay" class="custom-alert-overlay">
+        <div class="custom-alert-box" style="text-align:left;">
+            <h3 style="text-align:center;">Change Name</h3>
+            <div class="input-group" style="margin-top:14px;">
+                <input type="text" id="newNameInput" placeholder="Full Name">
+                <i class="fas fa-user icon-left"></i>
+            </div>
+            <button class="btn" style="margin-top:0;" onclick="window.saveName()">Save Name</button>
+            <button class="btn" style="background:#f1f5f9; color:var(--text-light); box-shadow:none;" onclick="closeNameModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- POLICY SCREEN -->
+    <div id="policyOverlay" class="custom-alert-overlay" style="align-items:flex-end; padding:0;">
+        <div style="background:#fff; width:100%; max-width:480px; max-height:88vh; border-radius:24px 24px 0 0; display:flex; flex-direction:column; animation: fadeIn .3s ease-out;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #f1f5f9;">
+                <h3 style="font-weight:800; font-size:1.15rem;"><i class="fas fa-shield-halved" style="color:var(--primary);"></i> Terms &amp; Usage Policy</h3>
+                <i class="fas fa-times" style="cursor:pointer; font-size:1.2rem; color:var(--text-light);" onclick="closePolicy()"></i>
+            </div>
+            <div style="padding:18px 20px; overflow-y:auto; font-size:0.9rem; line-height:1.6; color:#334155;">
+                <p style="font-weight:700; color:var(--text-main); margin-bottom:6px;">1. Account &amp; Eligibility</p>
+                <p>One person may hold only one account. You must provide correct information. Sharing, selling or transferring your account is strictly prohibited.</p>
+
+                <p style="font-weight:700; color:var(--text-main); margin:14px 0 6px;">2. Login &amp; Security</p>
+                <p>You are fully responsible for all activity on your account. Never share your password. Repeated wrong login attempts will temporarily block access for your safety.</p>
+
+                <p style="font-weight:700; color:var(--text-main); margin:14px 0 6px;">3. Quota &amp; Fair Use</p>
+                <p>Email and Google login are available without a daily limit. Verification and password reset emails are rate limited to prevent abuse, so please wait a minute before requesting another. Automated, bulk or repeated requests are not allowed.</p>
+
+                <p style="font-weight:700; color:var(--text-main); margin:14px 0 6px;">4. Prohibited Activity</p>
+                <p>Fake accounts, fraud, hacking attempts, spam, misuse of referral codes and any illegal activity are strictly prohibited. Violation can lead to immediate suspension or permanent ban without notice.</p>
+
+                <p style="font-weight:700; color:var(--text-main); margin:14px 0 6px;">5. Data &amp; Privacy</p>
+                <p>We store only the details needed to run your account (name, email, referral code). Your data is not sold to third parties.</p>
+
+                <p style="font-weight:700; color:var(--text-main); margin:14px 0 6px;">6. Service Changes</p>
+                <p>SK BUSINESS may change, pause or stop any feature or policy at any time. Continued use of the app means you accept the updated policy.</p>
+
+                <p style="font-weight:700; color:var(--text-main); margin:14px 0 6px;">7. Support</p>
+                <p>For any problem, contact our Telegram Support. Our decision on any dispute is final.</p>
+            </div>
+            <div style="padding:14px 20px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid #f1f5f9;">
+                <button class="btn" style="margin-top:0;" onclick="closePolicy()">I Understand</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.openNameModal = function() {
+            document.getElementById('newNameInput').value = document.getElementById('accountName').innerText.trim();
+            document.getElementById('nameOverlay').style.display = 'flex';
+        }
+        window.closeNameModal = function() { document.getElementById('nameOverlay').style.display = 'none'; }
+        window.generateBill = function() {
+            showAlert("Generate Bill", "Bill generation will be available soon.", "info");
+        }
+
+        window.openPolicy = function() { document.getElementById('policyOverlay').style.display = 'flex'; }
+        window.closePolicy = function() { document.getElementById('policyOverlay').style.display = 'none'; }
+
+        window.showAlert = function(title, text, type = 'error') {
+            document.getElementById('customAlertTitle').innerText = title;
+            document.getElementById('customAlertText').innerText = text;
+            const iconDiv = document.getElementById('customAlertIcon');
+            if (type === 'error') {
+                iconDiv.innerHTML = '<i class="fas fa-times-circle"></i>';
+                iconDiv.style.color = 'var(--error)'; iconDiv.style.background = '#fef2f2';
+            } else if (type === 'success') {
+                iconDiv.innerHTML = '<i class="fas fa-check-circle"></i>';
+                iconDiv.style.color = 'var(--success)'; iconDiv.style.background = '#f0fdf4';
+            } else {
+                iconDiv.innerHTML = '<i class="fas fa-info-circle"></i>';
+                iconDiv.style.color = 'var(--primary)'; iconDiv.style.background = '#eff6ff';
+            }
+            document.getElementById('customAlertOverlay').style.display = 'flex';
+        }
+        window.closeAlert = function() { document.getElementById('customAlertOverlay').style.display = 'none'; }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            document.body.classList.toggle('in-app', viewId === 'appShell');
+        }
+
+        function autoValidatePhone(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            const ok = /^[6-9]\d{9}$/.test(input.value);
+            if (input.value.length === 10) {
+                input.classList.toggle('valid', ok); input.classList.toggle('invalid', !ok);
+            } else if (input.value.length > 0) {
+                input.classList.add('invalid'); input.classList.remove('valid');
+            } else {
+                input.classList.remove('valid', 'invalid');
+            }
+        }
+
+        function showLoader() { document.getElementById('loader').style.display = 'flex'; }
+        function hideLoader() { document.getElementById('loader').style.display = 'none'; }
+
+        // Bottom nav: switch pages (all except Home are blank for now)
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('page-' + item.dataset.page).classList.add('active');
+                document.getElementById('pageTitle').innerText = item.dataset.title;
+            });
+        });
+
+        function resetNavToHome() {
+            document.querySelector('.nav-item[data-page="account"]').click();
+        }
+    </script>
+
+
+
+    <script>
+    window.skInstall = (function () {
+        let deferred = null;
+        const standalone = () => window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        function makeIcon(size) {
+            const c = document.createElement('canvas'); c.width = c.height = size;
+            const x = c.getContext('2d');
+            const g = x.createLinearGradient(0, 0, size, size);
+            g.addColorStop(0, '#2563eb'); g.addColorStop(0.55, '#8b5cf6'); g.addColorStop(1, '#ec4899');
+            x.fillStyle = g; x.fillRect(0, 0, size, size);
+            x.fillStyle = '#fff'; x.font = '800 ' + Math.round(size * 0.42) + 'px sans-serif';
+            x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('SK', size / 2, size / 2 + size * 0.02);
+            return c.toDataURL('image/png');
+        }
+        function setup() {
+            try {
+                const i192 = makeIcon(192), i512 = makeIcon(512);
+                const base = location.origin + location.pathname;
+                const manifest = {
+                    name: 'SK BUSINESS', short_name: 'SK BUSINESS', start_url: base, scope: base.replace(/[^/]*$/, ''),
+                    display: 'standalone', orientation: 'portrait', background_color: '#ffffff', theme_color: '#2563eb',
+                    icons: [
+                        { src: i192, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+                        { src: i512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+                    ]
+                };
+                const link = document.createElement('link'); link.rel = 'manifest';
+                link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' }));
+                document.head.appendChild(link);
+                const ap = document.createElement('link'); ap.rel = 'apple-touch-icon'; ap.href = i192; document.head.appendChild(ap);
+            } catch (e) { console.warn('manifest setup failed', e); }
+            if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            }
+            const row = document.getElementById('installRow');
+            if (standalone() && row) row.style.display = 'none';
+        }
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; });
+        window.addEventListener('appinstalled', () => {
+            deferred = null;
+            const row = document.getElementById('installRow'); if (row) row.style.display = 'none';
+            showAlert('Installed', 'SK BUSINESS install ho gaya. Ab home screen se seedha khol sakte hain.', 'success');
+        });
+        async function install() {
+            if (deferred) {
+                deferred.prompt();
+                try { await deferred.userChoice; } catch (e) {}
+                deferred = null;
+                return;
+            }
+            const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            if (ios) showAlert('Install on iPhone', 'Safari me Share button dabayein, phir "Add to Home Screen" chunein.', 'info');
+            else showAlert('Install App', 'Browser menu (⋮) kholein aur "Install app" ya "Add to Home screen" chunein. Agar option na dikhe to app ko https link se kholein.', 'info');
+        }
+        setup();
+        return { install };
+    })();
+    </script>
+
+    <script>
+    window.skApp = (function () {
+        const NAMES = ['Nasim', 'Shabnam', 'Arman', 'Farheen', 'Kamran', 'Other'];
+        const COLS = ['homeexp', 'factory', 'customers', 'buy', 'sales'];
+        const FILTERS = { day: ['1 Day', 1], week: ['1 Week', 7], month: ['1 Month', 30], year: ['1 Year', 365] };
+        let uid = null;
+        let store = { homeexp: [], factory: [], customers: [], buy: [], sales: [] };
+        let filt = { homeexp: 'day', factory: 'day', buy: 'day', sales: 'all' };
+        let draft = {};
+
+        const $ = (id) => document.getElementById(id);
+        const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const money = (n) => '₹' + (Math.round((Number(n) || 0) * 100) / 100).toLocaleString('en-IN');
+        const num = (v) => { const n = parseFloat(v); return isNaN(n) ? 0 : n; };
+        const fmtDate = (ts) => new Date(ts).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        const fmtTime = (ts) => new Date(ts).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        const uidGen = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+        function inRange(ts, key) {
+            if (key === 'all') return true;
+            const now = new Date();
+            const days = FILTERS[key][1];
+            if (key === 'day') { const s = new Date(); s.setHours(0, 0, 0, 0); return ts >= s.getTime(); }
+            return ts >= now.getTime() - days * 86400000;
+        }
+
+        // ---------- storage (local first, cloud sync best-effort) ----------
+        function lsKey(c) { return 'sk_' + uid + '_' + c; }
+        function persist(c) {
+            try { localStorage.setItem(lsKey(c), JSON.stringify(store[c])); } catch (e) {}
+            cloudSave(c);
+        }
+        let warned = false;
+        function cloudSave(c) {
+            if (!window.skCloud) return;
+            window.skCloud.save(uid, c, store[c]).catch(e => {
+                console.warn('cloud save failed', e);
+                if (!warned) { warned = true; showAlert('Cloud Sync Issue', 'Data phone me safe hai lekin Firebase me save nahi hua. Internet ya Firestore rules check karein.', 'error'); }
+            });
+        }
+        async function init(u) {
+            uid = u;
+            COLS.forEach(c => {
+                try { store[c] = JSON.parse(localStorage.getItem(lsKey(c)) || '[]'); } catch (e) { store[c] = []; }
+            });
+            renderAll();
+            if (window.skCloud) {
+                for (const c of COLS) {
+                    try {
+                        const remote = await window.skCloud.load(uid, c);
+                        if (!Array.isArray(remote) && store[c].length) cloudSave(c);
+                        if (Array.isArray(remote)) {
+                            const map = {};
+                            const remoteIds = new Set(remote.map(x => x.id));
+                            const localOnly = store[c].some(x => !remoteIds.has(x.id));
+                            [...store[c], ...remote].forEach(x => { map[x.id] = x; });
+                            store[c] = Object.values(map);
+                            if (localOnly) cloudSave(c);
+                            try { localStorage.setItem(lsKey(c), JSON.stringify(store[c])); } catch (e) {}
+                        }
+                    } catch (e) { console.warn('cloud load skipped', c, e); }
+                }
+                renderAll();
+            }
+        }
+
+        // ---------- sheet helpers ----------
+        function openSheet(title, body, foot, splitFoot) {
+            $('skSheetTitle').innerText = title;
+            $('skSheetBody').innerHTML = body;
+            $('skSheetFoot').className = 'sheet-foot' + (splitFoot ? ' split' : '');
+            $('skSheetFoot').style.display = foot ? 'flex' : 'none';
+            $('skSheetFoot').innerHTML = foot || '';
+            $('skSheet').style.display = 'flex';
+        }
+        function closeSheet() { $('skSheet').style.display = 'none'; }
+        function filterSelect(page, withAll) {
+            const opts = (withAll ? `<option value="all" ${filt[page] === 'all' ? 'selected' : ''}>All Time</option>` : '') +
+                Object.keys(FILTERS).map(k => `<option value="${k}" ${filt[page] === k ? 'selected' : ''}>${FILTERS[k][0]}</option>`).join('');
+            return `<select class="f-select" onchange="skApp.setFilter('${page}',this.value)">${opts}</select>`;
+        }
+        function setFilter(page, v) { filt[page] = v; renderAll(); }
+
+        // ---------- EXPENSE pages (home + factory) ----------
+        function renderExpense(col, pageId) {
+            const list = store[col].filter(x => inRange(x.ts, filt[col])).sort((a, b) => b.ts - a.ts);
+            const total = list.reduce((s, x) => s + x.amount, 0);
+            $(pageId).innerHTML = `
+                <div class="pg-top">${filterSelect(col, false)}
+                    <button class="add-fab" onclick="skApp.openExpense('${col}')"><i class="fas fa-plus"></i></button></div>
+                <div class="total-box"><small>Total Expense (${FILTERS[filt[col]][0]})</small><b>${money(total)}</b></div>
+                ${list.length ? list.map(x => `
+                    <div class="rec-card" onclick="skApp.viewExpense('${col}','${x.id}')">
+                        <div class="l"><b>${esc(x.product)}</b><span>${esc(x.expenser)} • ${fmtDate(x.ts)}</span></div>
+                        <div class="r">${money(x.amount)}</div>
+                    </div>`).join('') : '<div class="empty-msg">No expense in this period</div>'}`;
+        }
+        function openExpense(col) {
+            const home = col === 'homeexp';
+            openSheet(home ? 'Add Home Expense' : 'Add Factory Expense', `
+                <label class="lbl">Amount <em>*</em></label>
+                <input class="f-input" id="exAmt" type="number" inputmode="decimal" placeholder="Amount">
+                <label class="lbl">Product Name <em>*</em></label>
+                <input class="f-input" id="exProd" type="text" placeholder="Product name">
+                <label class="lbl">Expenser (who spent) <em>*</em></label>
+                <input class="f-input" id="exWho" type="text" placeholder="Name" ${home ? 'onfocus="skApp.showChips()"' : ''}>
+                ${home ? `<div class="chips" id="exChips">${NAMES.map(n => `<span class="chip" onclick="skApp.pickName('${n}')">${n}</span>`).join('')}</div>` : ''}`,
+                `<button class="btn" onclick="skApp.saveExpense('${col}')">Save</button>`);
+        }
+        function showChips() { $('exChips').classList.add('show'); }
+        function pickName(n) {
+            const el = $('exWho');
+            if (n === 'Other') { el.value = ''; el.focus(); } else { el.value = n; }
+            $('exChips').classList.remove('show');
+        }
+        function saveExpense(col) {
+            const amount = num($('exAmt').value), product = $('exProd').value.trim(), expenser = $('exWho').value.trim();
+            if (!(amount > 0)) return showAlert('Required', 'Please enter the amount.', 'error');
+            if (!product) return showAlert('Required', 'Please enter the product name.', 'error');
+            if (!expenser) return showAlert('Required', 'Please enter who spent (expenser).', 'error');
+            store[col].push({ id: uidGen(), ts: Date.now(), amount, product, expenser });
+            persist(col); closeSheet(); renderAll();
+        }
+        function viewExpense(col, id) {
+            const x = store[col].find(i => i.id === id); if (!x) return;
+            openSheet('Expense Detail', `
+                <div class="det-row"><span>Amount</span><span>${money(x.amount)}</span></div>
+                <div class="det-row"><span>Product</span><span>${esc(x.product)}</span></div>
+                <div class="det-row"><span>Expenser</span><span>${esc(x.expenser)}</span></div>
+                <div class="det-row"><span>Date</span><span>${fmtDate(x.ts)}</span></div>
+                <div class="det-row"><span>Time</span><span>${fmtTime(x.ts)}</span></div>`, '');
+        }
+
+        // ---------- CUSTOMER ----------
+        function renderCustomer() {
+            const list = [...store.customers].sort((a, b) => b.ts - a.ts);
+            $('page-customer').innerHTML = `
+                <div class="pg-top">
+                    <div class="total-box" style="margin:0; flex:1;"><small>Total Customer</small><b>${list.length}</b></div>
+                    <button class="add-fab" onclick="skApp.openCustomer()"><i class="fas fa-plus"></i></button></div>
+                ${list.length ? list.map(x => `
+                    <div class="rec-card" onclick="skApp.viewCustomer('${x.id}')">
+                        <div class="l"><b>${esc(x.name)}</b><span>${esc(x.mobile)} • ${esc(x.location)}</span></div>
+                        <i class="fas fa-chevron-right" style="color:#cbd5e1;"></i>
+                    </div>`).join('') : '<div class="empty-msg">No customer added yet</div>'}`;
+        }
+        function openCustomer() {
+            openSheet('Add Customer', `
+                <label class="lbl">Customer Name <em>*</em></label>
+                <input class="f-input" id="cuName" type="text" placeholder="Customer name">
+                <label class="lbl">Mobile Number <em>*</em></label>
+                <input class="f-input" id="cuMob" type="tel" inputmode="numeric" maxlength="10" placeholder="10 digit mobile" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <label class="lbl">Location <em>*</em></label>
+                <input class="f-input" id="cuLoc" type="text" placeholder="Location">`,
+                `<button class="btn" onclick="skApp.saveCustomer()">Save</button>`);
+        }
+        function saveCustomer() {
+            const name = $('cuName').value.trim(), mobile = $('cuMob').value.trim(), location = $('cuLoc').value.trim();
+            if (!name) return showAlert('Required', 'Please enter customer name.', 'error');
+            if (!/^\d{10}$/.test(mobile)) return showAlert('Invalid', 'Please enter a valid 10 digit mobile number.', 'error');
+            if (!location) return showAlert('Required', 'Please enter location.', 'error');
+            store.customers.push({ id: uidGen(), ts: Date.now(), name, mobile, location });
+            persist('customers'); closeSheet(); renderAll();
+        }
+        function viewCustomer(id) {
+            const x = store.customers.find(i => i.id === id); if (!x) return;
+            openSheet('Customer Detail', `
+                <div class="det-row"><span>Name</span><span>${esc(x.name)}</span></div>
+                <div class="det-row"><span>Mobile</span><span>${esc(x.mobile)}</span></div>
+                <div class="det-row"><span>Location</span><span>${esc(x.location)}</span></div>
+                <div class="det-row"><span>Added</span><span>${fmtDate(x.ts)} ${fmtTime(x.ts)}</span></div>`, '');
+        }
+
+        // ---------- multi-row item editor (Buy + Sells) ----------
+        const MAXROWS = 6;
+        function rowHtml(i, kind) {
+            const r = draft.rows[i];
+            const nameLbl = kind === 'buy' ? 'Raw material name' : 'Product name';
+            const rateLbl = kind === 'buy' ? 'Rate' : 'Price';
+            return `<div class="item-row">
+                ${draft.rows.length > 1 ? `<i class="fas fa-trash rm" onclick="skApp.removeRow(${i})"></i>` : ''}
+                <input class="f-input" type="text" placeholder="${nameLbl} *" value="${esc(r.name)}" oninput="skApp.rowSet(${i},'name',this.value)">
+                <div class="grid">
+                    <input class="f-input" type="number" inputmode="decimal" placeholder="${rateLbl} *" value="${r.rate}" oninput="skApp.rowSet(${i},'rate',this.value)">
+                    <input class="f-input" type="number" inputmode="decimal" placeholder="Amount *" value="${r.amount}" oninput="skApp.rowSet(${i},'amount',this.value)">
+                </div></div>`;
+        }
+        function drawRows() {
+            $('rowsBox').innerHTML = draft.rows.map((_, i) => rowHtml(i, draft.kind)).join('');
+            $('addRowBtn').style.display = draft.rows.length >= MAXROWS ? 'none' : 'block';
+            updateTotals();
+        }
+        function addRow() { if (draft.rows.length < MAXROWS) { draft.rows.push({ name: '', rate: '', amount: '' }); drawRows(); } }
+        function removeRow(i) { draft.rows.splice(i, 1); drawRows(); }
+        function rowSet(i, k, v) { draft.rows[i][k] = v; updateTotals(); }
+        function totalOf() { return draft.rows.reduce((s, r) => s + num(r.amount), 0); }
+        function updateTotals() {
+            const t = totalOf();
+            if ($('totAmt')) $('totAmt').innerText = money(t);
+            if (draft.kind === 'sell' && $('dueAmt')) {
+                const got = num($('gotAmt') ? $('gotAmt').value : 0);
+                const due = Math.max(t - got, 0);
+                $('dueAmt').innerText = money(due);
+                $('dueAmt').className = due > 0 ? 'amt-red' : 'amt-green';
+            }
+        }
+        function validRows(label) {
+            for (const r of draft.rows) {
+                if (!r.name.trim() || !(num(r.rate) > 0) || !(num(r.amount) > 0)) {
+                    showAlert('Required', `Please fill ${label} name, rate and amount in every row.`, 'error'); return null;
+                }
+            }
+            return draft.rows.map(r => ({ name: r.name.trim(), rate: num(r.rate), amount: num(r.amount) }));
+        }
+
+        // ---------- BUY ----------
+        function renderBuy() {
+            const list = store.buy.filter(x => inRange(x.ts, filt.buy)).sort((a, b) => b.ts - a.ts);
+            const total = list.reduce((s, x) => s + x.total, 0);
+            $('page-buy').innerHTML = `
+                <div class="pg-top">${filterSelect('buy', false)}
+                    <button class="add-fab" onclick="skApp.openBuy()"><i class="fas fa-plus"></i></button></div>
+                <div class="total-box"><small>Total Buy (${FILTERS[filt.buy][0]})</small><b>${money(total)}</b></div>
+                ${list.length ? list.map(x => `
+                    <div class="rec-card" onclick="skApp.viewBuy('${x.id}')">
+                        <div class="l"><b>${esc(x.items.map(i => i.name).join(', '))}</b><span>${x.items.length} item(s) • ${fmtDate(x.ts)}</span></div>
+                        <div class="r">${money(x.total)}</div>
+                    </div>`).join('') : '<div class="empty-msg">No buy entry in this period</div>'}`;
+        }
+        function openBuy() {
+            draft = { kind: 'buy', rows: [{ name: '', rate: '', amount: '' }] };
+            openSheet('Add Buy', `
+                <div id="rowsBox"></div>
+                <button class="add-row-btn" id="addRowBtn" onclick="skApp.addRow()"><i class="fas fa-plus"></i> Add Raw Material</button>
+                <div class="sum-line big" style="margin-top:8px;"><span>Total Amount :-</span><span id="totAmt">₹0</span></div>`,
+                `<button class="btn" onclick="skApp.saveBuy()">Save</button>`);
+            drawRows();
+        }
+        function saveBuy() {
+            const items = validRows('raw material'); if (!items) return;
+            store.buy.push({ id: uidGen(), ts: Date.now(), items, total: items.reduce((s, i) => s + i.amount, 0) });
+            persist('buy'); closeSheet(); renderAll();
+        }
+        function viewBuy(id) {
+            const x = store.buy.find(i => i.id === id); if (!x) return;
+            openSheet('Buy Detail', `
+                ${x.items.map(i => `<div class="det-row"><span>${esc(i.name)}<br><small>Rate ${money(i.rate)}</small></span><span>${money(i.amount)}</span></div>`).join('')}
+                <div class="det-row"><span>Total Amount</span><span>${money(x.total)}</span></div>
+                <div class="det-row"><span>Date</span><span>${fmtDate(x.ts)}</span></div>
+                <div class="det-row"><span>Time</span><span>${fmtTime(x.ts)}</span></div>`, '');
+        }
+
+        // ---------- SELLS ----------
+        function renderSales() {
+            const list = store.sales.filter(x => inRange(x.ts, filt.sales)).sort((a, b) => b.ts - a.ts);
+            const due = list.reduce((s, x) => s + x.due, 0);
+            const label = filt.sales === 'all' ? 'All Time' : FILTERS[filt.sales][0];
+            $('page-sales').innerHTML = `
+                <div class="pg-top">${filterSelect('sales', true)}
+                    <button class="add-fab" onclick="skApp.openSale()"><i class="fas fa-plus"></i></button></div>
+                <div class="total-box"><small>Total Due (${label})</small><b>${money(due)}</b></div>
+                ${list.length ? list.map(x => `
+                    <div class="rec-card" onclick="skApp.viewSale('${x.id}')">
+                        <div class="l"><b>${esc(x.customer)}</b><span>${esc(x.items.map(i => i.name).join(', '))} • ${fmtDate(x.ts)}</span></div>
+                        <div class="r">${money(x.total)}
+                            ${x.due > 0 ? `<small class="amt-red">Due - ${money(x.due)}</small>` : `<small class="amt-green"><i class="fas fa-check-circle"></i> Paid</small>`}
+                        </div>
+                    </div>`).join('') : '<div class="empty-msg">No sale in this period</div>'}`;
+        }
+        function openSale() {
+            if (!store.customers.length) return showAlert('No Customer', 'Please add a customer first in the Customer page.', 'info');
+            draft = { kind: 'sell', rows: [{ name: '', rate: '', amount: '' }] };
+            const opts = [...store.customers].sort((a, b) => a.name.localeCompare(b.name))
+                .map(c => `<option value="${esc(c.id)}">${esc(c.name)} (${esc(c.mobile)})</option>`).join('');
+            openSheet('Add Sale', `
+                <label class="lbl">Customer Name <em>*</em></label>
+                <select class="f-input" id="slCust"><option value="">Select customer</option>${opts}</select>
+                <div id="rowsBox"></div>
+                <button class="add-row-btn" id="addRowBtn" onclick="skApp.addRow()"><i class="fas fa-plus"></i> Add Product</button>
+                <div class="sum-line big" style="margin-top:8px;"><span>Total Amount</span><span id="totAmt">₹0</span></div>
+                <label class="lbl">Amount Get (received)</label>
+                <input class="f-input" id="gotAmt" type="number" inputmode="decimal" placeholder="0" oninput="skApp.updateTotals()">
+                <div class="sum-line big"><span>Due</span><span id="dueAmt" class="amt-green">₹0</span></div>`,
+                `<button class="btn" onclick="skApp.saveSale()">Save</button>`);
+            drawRows();
+        }
+        function saveSale() {
+            const custId = $('slCust').value;
+            const custObj = store.customers.find(c => c.id === custId);
+            if (!custObj) return showAlert('Required', 'Please select a customer.', 'error');
+            const customer = custObj.name;
+            const items = validRows('product'); if (!items) return;
+            const total = items.reduce((s, i) => s + i.amount, 0);
+            const got = num($('gotAmt').value);
+            if (got < 0) return showAlert('Invalid', 'Received amount cannot be negative.', 'error');
+            if (got > total) return showAlert('Invalid', 'Received amount cannot be more than total amount.', 'error');
+            store.sales.push({ id: uidGen(), ts: Date.now(), custId, customer, items, total, got, due: Math.round((total - got) * 100) / 100 });
+            persist('sales'); closeSheet(); renderAll();
+        }
+        function viewSale(id) {
+            const x = store.sales.find(i => i.id === id); if (!x) return;
+            openSheet('Sale Detail', `
+                <div class="det-row"><span>Customer</span><span>${esc(x.customer)}</span></div>
+                ${x.items.map(i => `<div class="det-row"><span>${esc(i.name)}<br><small>Price ${money(i.rate)}</small></span><span>${money(i.amount)}</span></div>`).join('')}
+                <div class="det-row"><span>Total Amount</span><span>${money(x.total)}</span></div>
+                <div class="det-row"><span>Amount Get</span><span>${money(x.got)}</span></div>
+                <div class="det-row"><span>Status</span><span>${x.due > 0 ? `<span class="badge-due">Due - ${money(x.due)}</span>` : `<span class="badge-paid"><i class="fas fa-check-circle"></i> Paid</span>`}</span></div>
+                <div class="det-row"><span>Date</span><span>${fmtDate(x.ts)}</span></div>
+                <div class="det-row"><span>Time</span><span>${fmtTime(x.ts)}</span></div>`, dueButtons(x), true);
+        }
+        function custOf(sale) {
+            return store.customers.find(c => c.id === sale.custId) || store.customers.find(c => c.name === sale.customer);
+        }
+        function dueButtons(x) {
+            if (!(x.due > 0)) return '';
+            const c = custOf(x);
+            if (!c || !c.mobile) return '';
+            const msg = `Namaste ${x.customer}, aapka SK BUSINESS ka ${money(x.due)} due baaki hai. Kripya jaldi se jaldi payment kar dein, yeh zaroori hai. Dhanyavaad.`;
+            return `<a class="call" href="tel:+91${esc(c.mobile)}"><i class="fas fa-phone"></i> Call</a>
+                    <a class="wa" href="https://wa.me/91${esc(c.mobile)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> WhatsApp</a>`;
+        }
+
+        // ---------- CUSTOMER DATA DOWNLOAD ----------
+        function openCustDownload() {
+            if (!store.customers.length) return showAlert('No Customer', 'No customer added yet.', 'info');
+            const opts = [...store.customers].sort((a, b) => a.name.localeCompare(b.name))
+                .map(c => `<option value="${esc(c.id)}">${esc(c.name)} (${esc(c.mobile)})</option>`).join('');
+            openSheet('Customer Data Download', `
+                <label class="lbl">Customer</label>
+                <select class="f-input" id="cdWho"><option value="all">All Customers</option>${opts}</select>
+                <p style="font-size:.8rem; color:var(--text-light); margin-top:12px; font-weight:600;">Total balance, due, paid amount, last purchase aur har product ki detail CSV me aayegi.</p>`,
+                `<button class="btn" onclick="skApp.doCustDownload()"><i class="fas fa-download"></i> Download</button>`);
+        }
+        function doCustDownload() {
+            const who = $('cdWho').value;
+            const custs = store.customers.filter(c => who === 'all' || c.id === who).sort((a, b) => a.name.localeCompare(b.name));
+            const lines = [];
+            const row = (arr) => arr.map(csvCell).join(',');
+            lines.push(row(['CUSTOMER SUMMARY']));
+            lines.push(row(['Customer', 'Mobile', 'Location', 'Total Bought', 'Total Paid', 'Total Due', 'Last Purchase Date', 'Last Purchase Time', 'Last Purchase Product', 'Last Purchase Amount']));
+            const details = [];
+            custs.forEach(c => {
+                const sales = store.sales.filter(x => x.custId === c.id || (!x.custId && x.customer === c.name)).sort((a, b) => b.ts - a.ts);
+                const bought = sales.reduce((t, x) => t + x.total, 0);
+                const paid = sales.reduce((t, x) => t + x.got, 0);
+                const due = sales.reduce((t, x) => t + x.due, 0);
+                const last = sales[0];
+                lines.push(row([c.name, c.mobile, c.location, bought, paid, due,
+                    last ? fmtDate(last.ts) : '-', last ? fmtTime(last.ts) : '-',
+                    last ? last.items.map(i => i.name).join(' | ') : '-', last ? last.total : 0]));
+                sales.forEach(x => x.items.forEach((i, idx) => details.push([c.name, fmtDate(x.ts), fmtTime(x.ts), i.name, i.rate, i.amount,
+                    idx === 0 ? x.total : '', idx === 0 ? x.got : '', idx === 0 ? x.due : ''])));
+            });
+            lines.push('');
+            lines.push(row(['PRODUCT DETAIL']));
+            lines.push(row(['Customer', 'Date', 'Time', 'Product', 'Price', 'Product Amount', 'Bill Total', 'Paid', 'Due']));
+            details.forEach(d => lines.push(row(d)));
+            const blob = new Blob(['\ufeff' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            const nm = who === 'all' ? 'all-customers' : custs[0].name.replace(/[^a-z0-9]+/gi, '-');
+            a.download = 'SK-CUSTOMER-' + nm + '-' + new Date().toISOString().slice(0, 10) + '.csv';
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+            closeSheet();
+            showAlert('Downloaded', 'Customer data downloaded.', 'success');
+        }
+
+        // ---------- DOWNLOAD FORM ----------
+        function openDownload() {
+            openSheet('Download Form', `
+                <label class="lbl">Data</label>
+                <select class="f-input" id="dlWhat">
+                    <option value="all">All Data</option>
+                    <option value="homeexp">Home Expense</option>
+                    <option value="factory">Factory Expense</option>
+                    <option value="customers">Customers</option>
+                    <option value="buy">Buy</option>
+                    <option value="sales">Sells</option>
+                </select>
+                <label class="lbl">Period</label>
+                <select class="f-input" id="dlRange">
+                    <option value="all">All Time</option>
+                    <option value="day">1 Day</option>
+                    <option value="week">1 Week</option>
+                    <option value="month">1 Month</option>
+                    <option value="year">1 Year</option>
+                </select>
+                <p style="font-size:.8rem; color:var(--text-light); margin-top:12px; font-weight:600;">File will download as CSV (opens in Excel / Google Sheets).</p>`,
+                `<button class="btn" onclick="skApp.doDownload()"><i class="fas fa-download"></i> Download</button>`);
+        }
+        function csvCell(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }
+        function doDownload() {
+            const what = $('dlWhat').value, range = $('dlRange').value;
+            const pick = (c) => store[c].filter(x => inRange(x.ts, range)).sort((a, b) => b.ts - a.ts);
+            const sections = [];
+            const add = (title, head, rows) => { sections.push(csvCell(title), head.map(csvCell).join(','), ...rows.map(r => r.map(csvCell).join(',')), ''); };
+            const want = (c) => what === 'all' || what === c;
+            const dt = (x) => [fmtDate(x.ts), fmtTime(x.ts)];
+            if (want('homeexp')) add('HOME EXPENSE', ['Date', 'Time', 'Product', 'Expenser', 'Amount'], pick('homeexp').map(x => [...dt(x), x.product, x.expenser, x.amount]));
+            if (want('factory')) add('FACTORY EXPENSE', ['Date', 'Time', 'Product', 'Expenser', 'Amount'], pick('factory').map(x => [...dt(x), x.product, x.expenser, x.amount]));
+            if (want('customers')) add('CUSTOMERS', ['Date', 'Time', 'Name', 'Mobile', 'Location'], pick('customers').map(x => [...dt(x), x.name, x.mobile, x.location]));
+            if (want('buy')) add('BUY', ['Date', 'Time', 'Raw Materials (name rate amount)', 'Total'], pick('buy').map(x => [...dt(x), x.items.map(i => `${i.name} @${i.rate} = ${i.amount}`).join(' | '), x.total]));
+            if (want('sales')) add('SELLS', ['Date', 'Time', 'Customer', 'Products (name price amount)', 'Total', 'Received', 'Due'], pick('sales').map(x => [...dt(x), x.customer, x.items.map(i => `${i.name} @${i.rate} = ${i.amount}`).join(' | '), x.total, x.got, x.due]));
+            const blob = new Blob(['\ufeff' + sections.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'SK-BUSINESS-' + what + '-' + new Date().toISOString().slice(0, 10) + '.csv';
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+            closeSheet();
+            showAlert('Downloaded', 'Your file has been downloaded.', 'success');
+        }
+
+        function renderAll() {
+            renderExpense('homeexp', 'page-homeexp');
+            renderExpense('factory', 'page-factory');
+            renderCustomer(); renderBuy(); renderSales();
+        }
+
+        return { init, closeSheet, setFilter, openExpense, saveExpense, viewExpense, showChips, pickName,
+            openCustomer, saveCustomer, viewCustomer, openBuy, saveBuy, viewBuy, openSale, saveSale, viewSale,
+            addRow, removeRow, rowSet, updateTotals, openDownload, doDownload, openCustDownload, doCustDownload };
+    })();
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+        import {
+            getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+            signOut, onAuthStateChanged, updateProfile, sendEmailVerification,
+            sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup,
+            verifyPasswordResetCode, confirmPasswordReset, applyActionCode,
+            setPersistence, browserLocalPersistence
+        } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAwVOtZqC9Sgz951yi1vZNk4GwbUEbLcdU",
+            authDomain: "sk-business-2024.firebaseapp.com",
+            projectId: "sk-business-2024",
+            storageBucket: "sk-business-2024.firebasestorage.app",
+            messagingSenderId: "492240961306",
+            appId: "1:492240961306:web:82c4a6a9589cc969c836a3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        setPersistence(auth, browserLocalPersistence).catch(() => {});
+        const db = getFirestore(app);
+
+        window.skCloud = {
+            async save(uid, name, items) {
+                await setDoc(doc(db, "users", uid, "store", name), { items: items, updatedAt: serverTimestamp() });
+            },
+            async load(uid, name) {
+                const s = await getDoc(doc(db, "users", uid, "store", name));
+                return s.exists() ? (s.data().items || []) : null;
+            }
+        };
+
+        const emailOk = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+        function authError(code) {
+            const map = {
+                'auth/invalid-email': 'Please enter a valid email address.',
+                'auth/user-not-found': 'Account not found. Please register first.',
+                'auth/wrong-password': 'Incorrect password!',
+                'auth/invalid-credential': 'Incorrect email or password.',
+                'auth/email-already-in-use': 'This email is already registered. Please login.',
+                'auth/weak-password': 'Password must be at least 6 characters.',
+                'auth/too-many-requests': 'Too many attempts. Please wait a few minutes and try again.',
+                'auth/network-request-failed': 'Network error. Check your internet and try again.',
+                'auth/popup-closed-by-user': 'Google sign-in was cancelled.',
+                'auth/cancelled-popup-request': 'Google sign-in was cancelled.',
+                'auth/popup-blocked': 'Popup blocked. Please allow popups and try again.',
+                'auth/unauthorized-domain': 'This domain is not authorized in Firebase (Authentication > Settings > Authorized domains).',
+                'auth/operation-not-allowed': 'This sign-in method is not enabled in Firebase Console.'
+            };
+            return map[code] || ('Something went wrong (' + (code || 'unknown') + '). Please try again.');
+        }
+
+        // Create the Firestore profile if it does not exist yet
+        async function ensureUserDoc(user, extra = {}) {
+            const ref = doc(db, "users", user.uid);
+            const snap = await getDoc(ref);
+            if (!snap.exists()) {
+                await setDoc(ref, {
+                    uid: user.uid,
+                    email: (user.email || '').toLowerCase(),
+                    name: user.displayName || extra.name || '',
+                    phone: extra.phone || '',
+                    referralCode: extra.referralCode || '',
+                    provider: extra.provider || 'password',
+                    joinedAt: serverTimestamp()
+                });
+            }
+        }
+
+        function needsVerify(user) {
+            return user && !user.emailVerified && user.providerData.some(p => p.providerId === 'password');
+        }
+
+        function showVerify(user) {
+            document.getElementById('verifyEmailText').innerText = user.email;
+            switchView('verifyPage');
+        }
+
+        function showHome(user, profileName) {
+            if (needsVerify(user)) { showVerify(user); return; }
+            const name = profileName || user.displayName || (user.email ? user.email.split('@')[0] : 'User');
+            document.getElementById('accountName').innerText = name;
+            document.getElementById('accountEmail').innerText = user.email || '';
+            document.getElementById('homeWelcomeText').innerText = `Welcome, ${name}!`;
+            document.getElementById('homeSubText').innerText = 'Welcome to SK BUSINESS. You have logged in successfully.';
+            resetNavToHome();
+            switchView('appShell');
+            if (window.skApp) window.skApp.init(user.uid);
+        }
+
+        // Keeps the user logged in after refresh, and routes correctly
+        let justRegistering = false;
+        const actionParams = new URLSearchParams(window.location.search);
+        const actionMode = actionParams.get('mode');
+        const oobCode = actionParams.get('oobCode');
+        let handlingAction = ['resetPassword', 'verifyEmail'].includes(actionMode) && !!oobCode;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (justRegistering || handlingAction) return;
+            if (user) {
+                let name = user.displayName;
+                try { await ensureUserDoc(user, { provider: 'password' }); } catch (e) { console.warn(e); }
+                try {
+                    const snap = await getDoc(doc(db, "users", user.uid));
+                    if (snap.exists() && snap.data().name) name = snap.data().name;
+                } catch (e) { console.warn(e); }
+                showHome(user, name);
+            } else {
+                switchView('loginPage');
+            }
+        });
+
+        // REGISTER
+        window.doRegister = async function() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value;
+            const cpass = document.getElementById('regCPass').value;
+            const refCode = document.getElementById('regRef').value.trim();
+
+            if (!name) { showAlert("Required", "Please enter your full name.", "error"); return; }
+            if (!emailOk(email)) { showAlert("Invalid Email", "Please enter a valid email address.", "error"); return; }
+            if (pass.length < 6) { showAlert("Weak Password", "Password must be at least 6 characters.", "error"); return; }
+            if (pass !== cpass) { showAlert("Error", "Passwords do not match!", "error"); return; }
+
+            showLoader();
+            justRegistering = true;
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                try { await updateProfile(cred.user, { displayName: name }); } catch (e) { console.warn(e); }
+                try { await ensureUserDoc(cred.user, { name, referralCode: refCode, provider: 'password' }); } catch (e) { console.warn("Profile save failed:", e); }
+                try { await sendEmailVerification(cred.user); } catch (e) { console.warn(e); }
+                justRegistering = false;
+                hideLoader();
+                showAlert("Verify Your Email", "Account created! A verification link has been sent to your email. Please verify to continue.", "success");
+                showHome(cred.user, name);
+            } catch (error) {
+                justRegistering = false;
+                hideLoader();
+                console.error(error);
+                showAlert("Failed", authError(error.code), "error");
+            }
+        }
+
+        // LOGIN (email + password)
+        window.doLogin = async function() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPass').value;
+            if (!emailOk(email)) { showAlert("Invalid Email", "Please enter a valid email address.", "error"); return; }
+            if (!pass) { showAlert("Required", "Please enter your password.", "error"); return; }
+
+            showLoader();
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                document.getElementById('loginPass').value = '';
+                // onAuthStateChanged opens the Home page with the welcome message
+            } catch (error) {
+                console.error(error);
+                showAlert("Login Failed", authError(error.code), "error");
+            }
+            hideLoader();
+        }
+
+        // GOOGLE LOGIN
+        // Google sign-in is switched off for now
+        window.googleLogin = function() {
+            showAlert("Not Available", "This function is not available right now. Please use Email login.", "info");
+        }
+
+        // RESET PASSWORD (email link - free, does not use the SMS quota)
+        window.sendReset = async function() {
+            const email = document.getElementById('resetEmail').value.trim();
+            if (!emailOk(email)) { showAlert("Invalid Email", "Please enter a valid email address.", "error"); return; }
+            showLoader();
+            try {
+                // Firebase says "sent" even for unknown emails, so check our users list first
+                let registered = true;
+                try {
+                    const q = query(collection(db, "users"), where("email", "==", email.toLowerCase()));
+                    const res = await getDocs(q);
+                    registered = !res.empty;
+                } catch (e) { console.warn("Registered-email check skipped:", e); }
+                if (!registered) {
+                    hideLoader();
+                    showAlert("Not Registered", "This email is not registered. Please create an account first.", "error");
+                    return;
+                }
+                await sendPasswordResetEmail(auth, email);
+                showAlert("Link Sent", "If this email is registered, a password reset link has been sent. Please check your inbox and spam folder.", "success");
+                document.getElementById('resetEmail').value = '';
+                switchView('loginPage');
+            } catch (error) {
+                console.error(error);
+                showAlert("Error", authError(error.code), "error");
+            }
+            hideLoader();
+        }
+
+        // CHANGE NAME
+        window.saveName = async function() {
+            const name = document.getElementById('newNameInput').value.trim();
+            if (name.length < 2) { showAlert("Required", "Please enter a valid name.", "error"); return; }
+            if (!auth.currentUser) return;
+            showLoader();
+            try {
+                await updateProfile(auth.currentUser, { displayName: name });
+                await setDoc(doc(db, "users", auth.currentUser.uid), { name: name }, { merge: true });
+                document.getElementById('accountName').innerText = name;
+                document.getElementById('homeWelcomeText').innerText = `Welcome, ${name}!`;
+                closeNameModal();
+                showAlert("Success", "Your name has been updated.", "success");
+            } catch (e) {
+                console.error(e);
+                showAlert("Error", authError(e.code), "error");
+            }
+            hideLoader();
+        }
+
+        // EMAIL VERIFICATION SCREEN
+        window.checkVerified = async function() {
+            if (!auth.currentUser) { switchView('loginPage'); return; }
+            showLoader();
+            try {
+                await auth.currentUser.reload();
+                if (auth.currentUser.emailVerified) {
+                    showHome(auth.currentUser, auth.currentUser.displayName);
+                } else {
+                    showAlert("Not Verified Yet", "Please open the link in your email first, then press this button again.", "error");
+                }
+            } catch (e) {
+                console.error(e);
+                showAlert("Error", authError(e.code), "error");
+            }
+            hideLoader();
+        }
+
+        window.resendVerification = async function() {
+            if (!auth.currentUser) return;
+            const btn = document.getElementById('resendBtn');
+            btn.disabled = true;
+            try {
+                await sendEmailVerification(auth.currentUser);
+                showAlert("Email Sent", "Verification email sent again. Check inbox and spam.", "success");
+            } catch (e) {
+                console.error(e);
+                showAlert("Error", authError(e.code), "error");
+            }
+            let t = 60;
+            btn.innerText = `Resend in ${t}s`;
+            const iv = setInterval(() => {
+                t--;
+                btn.innerText = `Resend in ${t}s`;
+                if (t <= 0) { clearInterval(iv); btn.disabled = false; btn.innerText = 'Resend Email'; }
+            }, 1000);
+        }
+
+        // LINKS FROM EMAIL (reset password / verify email) handled inside the app
+        function clearActionUrl() {
+            try { history.replaceState({}, '', window.location.pathname); } catch (e) {}
+        }
+
+        (async function runActionHandler() {
+            if (!handlingAction) return;
+            showLoader();
+            try {
+                if (actionMode === 'resetPassword') {
+                    const email = await verifyPasswordResetCode(auth, oobCode);
+                    document.getElementById('newPassEmail').innerText = email;
+                    switchView('newPassPage');
+                } else if (actionMode === 'verifyEmail') {
+                    await applyActionCode(auth, oobCode);
+                    handlingAction = false;
+                    clearActionUrl();
+                    await auth.authStateReady();
+                    if (auth.currentUser) {
+                        await auth.currentUser.reload();
+                        showHome(auth.currentUser, auth.currentUser.displayName);
+                    } else {
+                        showAlert("Email Verified", "Your email is verified. Please login.", "success");
+                        switchView('loginPage');
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                handlingAction = false;
+                clearActionUrl();
+                showAlert("Link Expired", "This link is invalid or already used. Please request a new one.", "error");
+                switchView('loginPage');
+            }
+            hideLoader();
+        })();
+
+        window.saveNewPassword = async function() {
+            const p1 = document.getElementById('newPass').value;
+            const p2 = document.getElementById('confirmNewPass').value;
+            if (p1.length < 6) { showAlert("Weak Password", "Password must be at least 6 characters.", "error"); return; }
+            if (p1 !== p2) { showAlert("Error", "Passwords do not match!", "error"); return; }
+            showLoader();
+            try {
+                await confirmPasswordReset(auth, oobCode, p1);
+                handlingAction = false;
+                clearActionUrl();
+                document.getElementById('newPass').value = '';
+                document.getElementById('confirmNewPass').value = '';
+                showAlert("Password Changed", "Your password was changed successfully and your email is verified. Please login with the new password.", "success");
+                switchView('loginPage');
+            } catch (e) {
+                console.error(e);
+                showAlert("Error", "This link has expired or was already used. Please request a new reset link.", "error");
+            }
+            hideLoader();
+        }
+
+        // LOGOUT
+        window.logout = async function() {
+            showLoader();
+            try { await signOut(auth); } catch (e) { console.error(e); }
+            hideLoader();
+            switchView('loginPage');
+        }
+    </script>
+</body>
+</html>
